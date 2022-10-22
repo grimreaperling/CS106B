@@ -10,10 +10,12 @@
  * for creating an amazing testing harness!
  */
 #include <iostream>
+#include <fstream>
 #include "grid.h"
+#include "filelib.h"
 #include "SimpleTest.h"
-using namespace std;
-
+using std::endl;     using std::cout;
+using std::ifstream; using std::string;
 /*
  * Sum Numbers (Code Write)
  * ----------------------------------
@@ -22,9 +24,37 @@ using namespace std;
  * will be composed entirely of numerical digits, optionally
  * preceded by a single negative sign.
  */
+bool isNumber(string s) {
+    if (s.size() > 0 and s[0] == '-') {
+        s = s.substr(1);
+    }
+    for (char c : s) {
+        if (!isdigit(c)) {
+            return false;
+        }
+    }
+    return true;
+}
+
 int sumNumbers(string filename) {
-    // TODO: Your code here
-    return 0;
+    int result = 0;
+    ifstream ifs;
+    if (!openFile(ifs, filename)) {
+        cout << "Cannot open the file!" << endl;
+        return 0;
+    }
+    Vector<string> sentences;
+    readEntireFile(ifs, sentences);
+    for (string sentence : sentences) {
+        Vector<string> words;
+        words = stringSplit(sentence, " "); 
+        for (string word : words) {
+            if (isNumber(word)) {
+                result += stringToInteger(word);
+            }
+        }
+    }
+    return result;
 }
 
 

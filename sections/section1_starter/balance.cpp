@@ -25,7 +25,28 @@ using namespace std;
  */
 
 int checkBalance(string code) {
-    return 0;
+    Stack<char> tokens;
+    for (int i = 0; i < code.size(); i++) {
+        if (code[i] == '(' or code[i] == '{') {
+            tokens.push(code[i]);
+        } else if (code[i] == ')') {
+            if (!tokens.isEmpty() && tokens.peek() == '(') {
+                tokens.pop();
+            } else {
+                return i;
+            }
+        } else if (code[i] == '}') {
+            if (!tokens.isEmpty() && tokens.peek() == '{') {
+                tokens.pop();
+            } else {
+                return i;
+            }
+        } 
+    }
+    if (tokens.isEmpty()) {
+        return -1;
+    }
+    return code.size();
 }
 
 

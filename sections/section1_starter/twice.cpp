@@ -25,7 +25,32 @@ using namespace std;
  */
 
 Set<int> twice(Vector<int> nums) {
-    return {};
+    Set<int> set1;
+    Set<int> set2;
+    int size = nums.size();
+    for (int i = 0; i < size; ) {
+        if (!set1.contains(nums[i])) {
+            set1.add(nums[i]);
+            nums.remove(i);
+            size--;
+        } else {
+            i++;
+        }
+    }
+    for (int i = 0; i < size; ) {
+        if (!set2.contains(nums[i])) {
+            set2.add(nums[i]);
+            nums.remove(i);
+            size--;
+        } else {
+            i++;
+        }
+    }
+    set1 = set1.intersect(set2);
+    for (int num : nums) {
+        set1.remove(num);
+    }
+    return set1;
 }
 
 

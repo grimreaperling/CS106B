@@ -34,14 +34,33 @@ using namespace std;
  * expects a new string in return that is the pig-Latin form of INPUT, and
  * pigLatinReference() expects the parameter INPUT to be modified by the function call.
  */
-
+int findIndex(string input) {
+    int i = 0;
+    Vector<char> vowels{'a', 'e', 'i', 'o', 'u', 'y'};
+    while (i < input.size()) {
+        char ch = input[i];
+        for (char vowel : vowels) {
+            if (vowel == ch) {
+                return i;
+            }
+        }
+        i++;
+    }
+    return 0;
+}
+ 
 string pigLatinReturn(string input) {
-    (void) input;
-    return "";
+    int index = findIndex(input);
+    string result = input.substr(index, input.size() - index) + input.substr(0, index) + "ay";
+    return result;
 }
 
 void pigLatinReference(string &input) {
-    (void) input;
+    int index = findIndex(input);
+    string temp = input.substr(0, index);
+    input.erase(0, index);
+    input += temp;
+    input += "ay";
 }
 
 

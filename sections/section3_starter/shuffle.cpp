@@ -34,8 +34,14 @@ using namespace std;
  */
 
 string randomShuffle(string input) {
-    // TODO: Your code here
-    return "";
+    int size = input.size() - 1;
+    if (size == 0) return input;
+    int left = randomInteger(0, size);
+    char a = input.at(left);
+    input.erase(left, 1);
+    string res = randomShuffle(input);
+    res.insert(res.begin(), a);
+    return res;
 }
 
 

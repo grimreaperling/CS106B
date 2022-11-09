@@ -14,18 +14,16 @@
 #include "vector.h"
 using namespace std;
 
-/* This function is intended to return a string which
- * contains only the letter characters from the original
- * (all non-letter characters are removed)
- *
- * WARNING: The provided code is buggy!
- *
- * Use unit tests to identify which inputs to this function
- * are incorrectly handled. Then, remove this comment and
- * replace it with a description of the bug you fixed.
+/* 
+ * This program have the problem it add the first element blindly and don't check whether it's letter.
  */
 string removeNonLetters(string s) {
-    string result = charToString(s[0]);
+    string result;
+    if (isalpha(s[0])) {
+        result = charToString(s[0]);
+    } else {
+        result = string("");
+    }
     for (int i = 1; i < s.length(); i++) {
         if (isalpha(s[i])) {
             result += s[i];
@@ -133,6 +131,9 @@ PROVIDED_TEST("Ashcraft is not a special case") {
     EXPECT_EQUAL(soundex("Ashcraft"), "A226");
 }
 
-// TODO: add your test cases here
+STUDENT_TEST("Some special case to exposes the hidden problem of the removeNonLetters function") {
+    EXPECT_EQUAL(removeNonLetters("'Huge"), "Huge");
+}
+
 
 

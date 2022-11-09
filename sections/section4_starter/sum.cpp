@@ -25,7 +25,15 @@ using namespace std;
  */
 
 bool canMakeSum(Vector<int>& values, int target) {
-    // TODO: Your code here
+    int loc = values.size() - 1;
+    if (loc == 0) return values[0] == target;
+    int value = values.get(loc);
+    values.remove(loc);
+    if (canMakeSum(values, target)) return true;
+    target -= value;
+    if (canMakeSum(values, target)) return true;
+    values.add(value);
+    target += value;
     return false;
 }
 

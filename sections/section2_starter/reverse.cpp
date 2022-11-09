@@ -28,7 +28,17 @@ using namespace std;
 
 Map<int, Set<string>> reverseMap(Map<string, int>& map) {
     Map<int, Set<string>> result;
-     /* TODO: Your code goes here! */
+    for (string key : map) {
+        int value = map.get(key);
+        if (result.containsKey(value)) {
+            Set<string> set = result.get(value);
+            set.add(key);
+            result.put(value, set);
+        } else {
+            Set<string> set = {key};
+            result.put(value, set);
+        }
+    }
     return result;
 }
 

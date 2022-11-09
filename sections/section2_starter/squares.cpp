@@ -23,8 +23,10 @@ using namespace std;
  */
 
 int sumOfSquares(int n) {
-    // TODO: Your code here
-    return 0;
+    if (n == 1) return 1;
+    else {
+        return n * n + sumOfSquares(n - 1);
+    }
 }
 
 

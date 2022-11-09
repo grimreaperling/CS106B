@@ -27,8 +27,19 @@ using namespace std;
  */
 
 int fewestCoinsFor(int cents, Set<int>& coins) {
-    // TODO: Your code here
-    return 0;
+    if (coins.size() == 1) return cents;
+    int a = coins.last();
+    int min = cents;
+    int times = cents / a;
+    coins.remove(a);
+    for (int i = 0; i <= times; i++) {
+        int number = fewestCoinsFor(cents - i * a, coins) + i;
+        if (number < min) {
+            min = number;
+        }
+    }
+    coins.add(a);
+    return min;
 }
 
 

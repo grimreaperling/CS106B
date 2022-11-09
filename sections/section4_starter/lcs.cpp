@@ -22,7 +22,15 @@ using namespace std;
  */
 
 string longestCommonSubsequence(string s1, string s2) {
-    // TODO: Your code here
+    if (s1.size() == 0 or s2.size() == 0) return "";
+    if (s1[0] == s2[0]) {
+        return s1[0] + longestCommonSubsequence(s1.substr(1), s2.substr(1));
+    } else {
+        string s3 = longestCommonSubsequence(s1, s2.substr(1));
+        string s4 = longestCommonSubsequence(s1.substr(1), s2);
+        if (s3.size() > s4.size()) return s3;
+        else return s4;
+    }
     return "";
 }
 

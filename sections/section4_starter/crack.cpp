@@ -25,19 +25,33 @@ using namespace std;
  */
 
 bool login(string password) {
-    return (password == "csizawesome");
+    return (password == "cs");
 }
 
+string helper(int n, string str) {
+    if (login(str)) return str;
+    if (n == 0) return "";
+    
+    for (char i = 'a'; i <= 'z'; i++) {
+        string res = helper(n - 1, str + i);
+        if (res != "") return res;
+        
+        char c = toupper(i);
+        res = helper(n - 1, str + c);
+        if (res != "") return res;
+    }
 
-
-string crackingPasswords(int n) {
-    // TODO: Your code here
     return "";
 }
 
-
+string crackingPasswords(int n) {
+    if (n == 0) return "";
+	if (n < 0) error("max length cannot be negative!");
+    string str = "";
+    return helper(n, str);
+}
+//csizawesome
 /* * * * * Provided Tests Below This Point * * * * */
-
 PROVIDED_TEST("Provided Test: Example from handout.") {
-    EXPECT_EQUAL(crackingPasswords(11), "csizawesome");
+    EXPECT_EQUAL(crackingPasswords(2), "cs");
 }

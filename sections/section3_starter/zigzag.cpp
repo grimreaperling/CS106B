@@ -26,8 +26,10 @@ using namespace std;
  */
 
 string zigzag(int n) {
-    // TODO: Your code here
-    return "";
+    if (n < 0) error("Please input a positive number!!");
+    if (n == 1) return "*";
+    if (n == 2) return "**";
+    else return "<" + zigzag(n - 2) + ">";
 }
 
 

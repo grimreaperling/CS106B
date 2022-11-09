@@ -27,9 +27,12 @@ using namespace std;
  */
 
 void doubleStack(Stack<int> & s) {
-    // TODO: Your code here
+    if (s.isEmpty()) return; 
+    int a = s.pop();
+    doubleStack(s);
+    s.push(a);
+    s.push(a);
 }
-
 
 /* * * * * Provided Tests Below This Point * * * * */
 

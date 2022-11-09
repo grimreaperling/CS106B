@@ -26,7 +26,16 @@ using namespace std;
  */
 
 bool isMeasurable(int target, Vector<int>& weights) {
-    // TODO: Your code here
+    if (target == 0) return true;
+    if (weights.isEmpty()) return false;
+    int weight = weights[0];
+    weights.remove(0);
+    if (target >= weight) {
+        if (isMeasurable(target - weight, weights)) return true;
+    }
+    if (isMeasurable(target, weights)) return true;
+    if (isMeasurable(target + weight, weights)) return true;
+    weights.insert(0, weight);
     return false;
 }
 

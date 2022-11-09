@@ -11,13 +11,14 @@
  */
 
 #include <iostream>
+#include <fstream>
+#include "map.h"
 #include "map.h"
 #include "vector.h"
 #include "filelib.h"
 #include "strlib.h"
 #include "SimpleTest.h"
-using namespace std;
-
+using std::string; using std::ifstream;
 /*
  * Friend List (Code Write)
  * ----------------------------------
@@ -29,7 +30,28 @@ using namespace std;
  */
 
 Map<string, Vector<string>> friendList(string filename) {
-    return {};
+    ifstream ifs;
+    Map<string, Vector<string>> result;
+    Vector<string> lines;
+    if (openFile(ifs, filename)) {
+        readEntireFile(ifs, lines);
+    }
+    for (string line : lines) {
+        Vector<string> tokens = stringSplit(line, " ");
+        if (!result.containsKey(tokens[0])) {
+            Vector<string> vec{tokens[1]};
+            result.put(tokens[0], vec);
+        } else {
+            result[tokens[0]] += tokens[1];
+        }
+        if (!result.containsKey(tokens[1])) {
+            Vector<string> vec{tokens[0]};
+            result.put(tokens[1], vec);
+        } else {
+            result[tokens[1]] += tokens[0];
+        }
+    }
+    return result;
 }
 
 

@@ -10,8 +10,16 @@ struct BackpackItem {
 };
 
 int fillBackpack(Vector<BackpackItem>& items, int targetWeight) {
-    // TODO: Fill me in!
-    return 0;
+    if (items.isEmpty()) return 0;
+    BackpackItem item = items[0];
+
+    items.remove(0);
+    int res1 = fillBackpack(items, targetWeight);
+    int res2 = item.survivalValue + fillBackpack(items, targetWeight - item.weight);
+    items.insert(0, item);
+    if (targetWeight < item.weight) return res1;
+    if (res1 > res2) return res1;
+    else return res2;
 }
 
 PROVIDED_TEST("Simple knapsack examples.") {

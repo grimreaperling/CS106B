@@ -17,26 +17,52 @@
 using namespace std;
 
 
-/* TODO: Replace this comment with a descriptive function
- * header comment.
+/* 
+ * The function to find the valid location to move based on the current location. 
  */
 Set<GridLocation> generateValidMoves(Grid<bool>& maze, GridLocation cur) {
     Set<GridLocation> neighbors;
-    /* TODO: Fill in the remainder of this function. */
+    int row = cur.row;
+    int col = cur.col;
+    int nrow = maze.numRows();
+    int ncol = maze.numCols();
+    if (row - 1 >= 0 && maze[row-1][col] == true) {
+        neighbors.add(GridLocation(row-1, col));
+    }
+    if (row + 1 < nrow && maze[row+1][col] == true) {
+        neighbors.add(GridLocation(row+1, col));
+    }
+    if (col - 1 >= 0 && maze[row][col-1] == true) {
+        neighbors.add(GridLocation(row, col-1));
+    }
+    if (col + 1 < ncol && maze[row][col+1] == true) {
+        neighbors.add(GridLocation(row, col+1));
+    }
     return neighbors;
 }
 
-/* TODO: Replace this comment with a descriptive function
- * header comment.
+/* 
+ * The function to make the input path is a valid path.
  */
 void validatePath(Grid<bool>& maze, Stack<GridLocation> path) {
     GridLocation mazeExit = {maze.numRows()-1,  maze.numCols()-1};
+    Set<GridLocation> upath;
 
     if (path.peek() != mazeExit) {
         error("Path does not end at maze exit");
     }
-    /* TODO: Fill in the remainder of this function. */
-
+    while (1) {
+        GridLocation curr = path.pop();
+        if (path.isEmpty()) {
+            if (curr.row == 0 and curr.row == 0) return;
+            else error("Not start on the entry");
+        }
+        if (upath.contains(curr)) error("The path contain a loop!");
+        else upath.add(curr);
+        if (!generateValidMoves(maze, path.peek()).contains(curr)) {
+            error("Not a valid move!");
+        }
+    }
     /* If you find a problem with the path, call error() to report it.
      * If the path is a valid solution, then this function should run to completion
      * without throwing any errors.
@@ -47,9 +73,26 @@ void validatePath(Grid<bool>& maze, Stack<GridLocation> path) {
  * header comment.
  */
 Stack<GridLocation> solveMaze(Grid<bool>& maze) {
+    GridLocation mazeExit = {maze.numRows()-1,  maze.numCols()-1};
     MazeGraphics::drawGrid(maze);
     Stack<GridLocation> path;
-    /* TODO: Fill in the remainder of this function. */
+    Queue<Stack<GridLocation>> paths;
+    path.push(GridLocation(0, 0));
+    paths.enqueue(path);
+    
+    while(!paths.isEmpty()) {
+        path = paths.dequeue();
+        MazeGraphics::highlightPath(path, "red");
+        if (path.peek() == mazeExit) return path;
+        for (GridLocation curr : generateValidMoves(maze, path.peek())) {
+            Stack<GridLocation> newpath = path;
+            Stack<GridLocation> testpath = path;
+            testpath.pop();
+            if (!testpath.isEmpty() && testpath.peek() == curr) continue;
+            newpath.push(curr);
+            paths.enqueue(newpath);
+        }
+    }
     return path;
 }
 

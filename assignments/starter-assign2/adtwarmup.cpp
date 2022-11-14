@@ -27,7 +27,8 @@ void reverse(Queue<int>& q) {
  * information on how to test and diagnose.
  */
 void duplicateNegatives(Queue<int>& q) {
-    for (int i = 0; i < q.size(); i++) {
+    int size = q.size();
+    for (int i = 0; i < size; i++) {
         int val = q.dequeue();
         q.enqueue(val);
         if (val < 0) {
@@ -41,7 +42,7 @@ void duplicateNegatives(Queue<int>& q) {
 // WARNING: the given code is buggy. See exercise writeup for more
 // information on how to test and diagnose.
 int sumStack(Stack<int> s) {
-    int total = s.pop();
+    int total = 0;
     while (!s.isEmpty()) {
         total += s.pop();
     }

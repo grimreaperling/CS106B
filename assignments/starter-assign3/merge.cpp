@@ -10,12 +10,46 @@
 using namespace std;
 
 /*
- * TODO: Replace this comment with a descriptive function
- * header comment.
+ * The function to helpe the checkorder function.
+ * which check whether all the number in the queue
+ * is greater than a.
+ */
+void helper(int a1, Queue<int> a) {
+    while (!a.isEmpty()) {
+        int n = a.dequeue();
+        if (n < a1) error("The queue not sorted!");
+    }
+}
+
+/*
+ * The function to implement the basic binaryMerge.
  */
 Queue<int> binaryMerge(Queue<int> a, Queue<int> b) {
     Queue<int> result;
-    /* TODO: Implement this function. */
+    while (!a.isEmpty() or !b.isEmpty()) {
+        int a1, b1;
+        if (a.isEmpty()) {
+            //b1 = b.peek(); 
+            result.enqueue(b.dequeue());
+            //helper(b1, b);
+            continue;
+        }
+        if (b.isEmpty()) {
+            //a1 = a.peek();
+            result.enqueue(a.dequeue());
+            //helper(a1, a);
+            continue;
+        }
+        a1 = a.peek();
+        b1 = b.peek();
+        if (b1 > a1) {
+            result.enqueue(a.dequeue());
+            //helper(a1, a);
+        } else {
+            result.enqueue(b.dequeue());
+            //helper(b1, b);
+        }
+    }
     return result;
 }
 
@@ -42,8 +76,14 @@ Queue<int> naiveMultiMerge(Vector<Queue<int>>& all) {
  */
 Queue<int> recMultiMerge(Vector<Queue<int>>& all) {
     Queue<int> result;
-    /* TODO: Implement this function. */
-    return result;
+    int size = all.size();
+    if (size == 1) return all.get(0);
+    int k = size / 2;
+    Vector<Queue<int>> vector1 = all.subList(0, k);
+    Vector<Queue<int>> vector2 = all.subList(k);
+    Queue<int> first = recMultiMerge(vector1);
+    Queue<int> second = recMultiMerge(vector2);
+    return binaryMerge(first, second);
 }
 
 
@@ -59,6 +99,12 @@ PROVIDED_TEST("binaryMerge, two short sequences") {
     EXPECT_EQUAL(binaryMerge(a, b), expected);
     EXPECT_EQUAL(binaryMerge(b, a), expected);
 }
+
+//STUDENT_TEST("binaryMerge, test the unordered check") {
+//    Queue<int> a = {2, 1, 3};
+//    Queue<int> b = {2, 3, 4};
+//    EXPECT_ERROR(binaryMerge(a, b));
+//}
 
 PROVIDED_TEST("naiveMultiMerge, small collection of short sequences") {
     Vector<Queue<int>> all = {{3, 6, 9, 9, 100},
@@ -80,8 +126,24 @@ PROVIDED_TEST("recMultiMerge, compare to naiveMultiMerge") {
     EXPECT_EQUAL(recMultiMerge(all), naiveMultiMerge(all));
 }
 
+STUDENT_TEST("recMultiMerge, compare to naiveMultiMerge on a range of inputs") {
+    for (int n = 10; n < 100; n++) {
+        Queue<int> input = createSequence(n);
+        Vector<Queue<int>> all(n);
+        distribute(input, all);
+        EXPECT_EQUAL(recMultiMerge(all), naiveMultiMerge(all));
+    }
+}
+
 PROVIDED_TEST("Time binaryMerge operation") {
     int n = 1000000;
+    Queue<int> a = createSequence(n);
+    Queue<int> b = createSequence(n);
+    TIME_OPERATION(a.size() + b.size(), binaryMerge(a, b));
+}
+
+STUDENT_TEST("Time binaryMerge operation 2x") {
+    int n = 2000000;
     Queue<int> a = createSequence(n);
     Queue<int> b = createSequence(n);
     TIME_OPERATION(a.size() + b.size(), binaryMerge(a, b));
@@ -104,6 +166,14 @@ PROVIDED_TEST("Time recMultiMerge operation") {
     TIME_OPERATION(input.size(), recMultiMerge(all));
 }
 
+STUDENT_TEST("Time recMultiMerge operation x2") {
+    int n = 180000;
+    int k = n/10;
+    Queue<int> input = createSequence(n);
+    Vector<Queue<int>> all(k);
+    distribute(input, all);
+    TIME_OPERATION(input.size(), recMultiMerge(all));
+}
 
 /* Test helper to fill queue with sorted sequence */
 Queue<int> createSequence(int size) {

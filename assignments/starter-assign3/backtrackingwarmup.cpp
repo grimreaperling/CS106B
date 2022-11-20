@@ -40,7 +40,7 @@ int buggyCount(Vector<int> &v, int index, int sumSoFar) {
     if (index == v.size()) {
         return (sumSoFar == 0);
     } else {
-        return buggyCount(v, index + 1, sumSoFar += v[index])
+        return buggyCount(v, index + 1, sumSoFar + v[index])
              + buggyCount(v, index + 1, sumSoFar);
     }
 }

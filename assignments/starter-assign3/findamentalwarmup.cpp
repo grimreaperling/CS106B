@@ -21,7 +21,9 @@ using namespace std;
  * negative inputs.
  */
 int factorial(int n) {
-    if (n == 0) {
+    if (n < 0) {
+        error("Please input a positive number!");
+    } else if (n == 0) {
         return 1;
     } else {
         return n * factorial(n - 1);
@@ -43,12 +45,8 @@ int factorial(int n) {
 double myPower(int base, int exp) {
     if (exp == 0) {         // handle zero exp
         return 1;
-    } else if (base == 0) { // handle zero base
-        return 0;
     } else if (exp < 0) {   // handle negative exp
         return 1.0 / myPower(base, -exp);
-    } else if (base < 0) {  // handle negative base
-        return -myPower(-base, exp);
     } else {                // both base and exp are positive
         return base * myPower(base, exp - 1);
     }
@@ -60,12 +58,20 @@ double myPower(int base, int exp) {
 PROVIDED_TEST("Confirm result of factorial(7)") {
     EXPECT_EQUAL(factorial(7), 7*6*5*4*3*2);
 }
+STUDENT_TEST("Confirm the program will not get stuck when inputing a negative number!") {
+    EXPECT_ERROR(factorial(-1));
+}
 
 PROVIDED_TEST("myPower(), compare to library pow(), fixed inputs") {
     EXPECT_EQUAL(myPower(7, 0), pow(7, 0));
     EXPECT_EQUAL(myPower(10, 2), pow(10, 2));
     EXPECT_EQUAL(myPower(5, -1), pow(5, -1));
     EXPECT_EQUAL(myPower(-3, 3), pow(-3, 3));
+}
+
+STUDENT_TEST("Test the correct output on some negative input!") {
+    EXPECT_EQUAL(myPower(-2, 2), pow(-2, 2));
+    EXPECT_EQUAL(myPower(-4, 4), pow(-4, 4));
 }
 
 PROVIDED_TEST("myPower(), generated inputs") {
@@ -76,3 +82,10 @@ PROVIDED_TEST("myPower(), generated inputs") {
     }
 }
 
+STUDENT_TEST("myPower(), generated inputs(include some positive inputs)!") {
+    for (int base = -25; base < 25; base++) {
+        for (int exp = -10; exp < 10; exp++) {
+            EXPECT_EQUAL(myPower(base, exp), pow(base, exp));
+        }
+    }
+}

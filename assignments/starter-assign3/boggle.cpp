@@ -1,8 +1,7 @@
 /*
- * TODO: remove and replace this file header comment
- * You will edit and turn in this file.
- * Remove starter comments and add your own
- * comments on each function and on complex code sections.
+ * This file contain a boggle game implementatin.
+ * In this file we use the recursive backtracing to implement a search algorithm
+ * to search for the path which in the grid board of words in the lexicon.
  */
 #include <iostream>    // for cout, endl
 #include <string>      // for string class
@@ -15,21 +14,84 @@
 using namespace std;
 
 /*
- * TODO: Replace this comment with a descriptive function
- * header comment.
+ * The function to return the point of a given word.
  */
 int points(string str) {
-    /* TODO: Implement this function. */
-    return 0;
+    if (str.size() < 4) return 0;
+    return str.size() - 3;
 }
 
 /*
- * TODO: Replace this comment with a descriptive function
- * header comment.
+ * This function return whether the stack contains a particular element.
+ */
+bool containLoc(Stack<GridLocation> path, GridLocation loc) {
+    while (!path.isEmpty()) {
+        if (path.pop() == loc) return true;
+    }
+    return false;
+}
+
+/*
+ * The function return the available move of the given location.
+ */
+Set<GridLocation> available(Grid<char> board, GridLocation loc) {
+    Set<GridLocation> locs;
+    int x = loc.row;
+    int y = loc.col;
+    if (board.inBounds(x - 1, y - 1)) locs.add(GridLocation(x - 1, y - 1));
+    if (board.inBounds(x - 1, y)) locs.add(GridLocation(x - 1, y));
+    if (board.inBounds(x - 1, y + 1)) locs.add(GridLocation(x - 1, y + 1));
+    if (board.inBounds(x, y - 1)) locs.add(GridLocation(x, y - 1));
+    if (board.inBounds(x, y + 1)) locs.add(GridLocation(x, y + 1));
+    if (board.inBounds(x + 1, y - 1)) locs.add(GridLocation(x + 1, y - 1));
+    if (board.inBounds(x + 1, y)) locs.add(GridLocation(x + 1, y));
+    if (board.inBounds(x + 1, y + 1)) locs.add(GridLocation(x + 1, y + 1));
+    return locs;
+}
+
+/*
+ * The function to judge whether a word is contained in the board.
+ */
+int search(Lexicon& lex, Grid<char>& board, Stack<GridLocation>& path, Set<string>& res, string& curr) {
+    int result = 0;
+    if (lex.contains(curr)) {
+        if (!res.contains(curr)) {
+            result += points(curr);
+            res.add(curr);
+        }
+    }
+    if (!lex.containsPrefix(curr)) return 0;
+    GridLocation loc = path.peek();
+    Set<GridLocation> locs = available(board, loc);
+    for (GridLocation pos : locs) {
+        if (containLoc(path, pos)) continue;
+        path.push(pos);
+        curr += board.get(pos);
+        result += search(lex, board, path, res, curr);
+        curr.pop_back();
+        path.pop();
+    }
+    return result;
+}
+
+/*
+ * The function to calculate the total score of the words 
+ * which can be found in the board.
  */
 int scoreBoard(Grid<char>& board, Lexicon& lex) {
-    /* TODO: Implement this function. */
-    return 0;
+    int result = 0;
+    Set<string> res;
+    for (int i = 0; i < board.numRows(); i++) {
+        for (int j = 0; j < board.numCols(); j++) {
+            GridLocation loc(i, j);
+            Stack<GridLocation> path;
+            path.push(loc);
+            string curr = "";
+            curr += board[i][j];
+            result += search(lex, board, path, res, curr);
+        }
+    }
+    return result;
 }
 
 /* * * * * * Test Cases * * * * * */

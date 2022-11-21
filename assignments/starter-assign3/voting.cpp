@@ -10,10 +10,14 @@ using namespace std;
  */
 Vector<int> getSums(Vector<int> blocks, int block, int gap) {
     Vector<int> res;
-    for (int i = 0; i < blocks.size(); i++) {
-        if (blocks[i] == block) {
-            blocks.remove(i);
-            break;
+    if (block == blocks[0]) {
+        blocks.remove(0);
+    } else {
+        for (int i = 0; i < blocks.size(); i++) {
+            if (blocks[i] == block) {
+                blocks.remove(i);
+                break;
+            }
         }
     }
     int curr = blocks[0];
@@ -23,16 +27,11 @@ Vector<int> getSums(Vector<int> blocks, int block, int gap) {
         return res;
     }
     res = getSums(blocks, curr, gap);
-    for (int i = 0; i < res.size();) {
-        if (res[i] > gap / 2) {
-            res.remove(i);
-        } else {
-            i++;
+    Vector<int> with;
+    for (int x : res) {
+        if (x + curr <= gap / 2) {
+            with.add(x + curr);
         }
-    }
-    Vector<int> with = res;
-    for (int& x : with) {
-        x = x + curr;
     }
     return res + with;
 }
@@ -97,12 +96,12 @@ PROVIDED_TEST("Test power index, blocks CA-TX-GA 55-38-16") {
     EXPECT_EQUAL(computePowerIndexes(blocks), expected);
 }
 
-//PROVIDED_TEST("Test power index, blocks EU post-Nice") {
-//    // Estonia is one of those 4s!!
-//    Vector<int> blocks = {29,29,29,29,27,27,14,13,12,12,12,12,12,10,10,10,7,7,7,7,7,4,4,4,4,4,3};
-//    Vector<int> expected = {8, 8, 8, 8, 7, 7, 3, 3, 3, 3, 3, 3, 3, 2, 2, 2, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0};
-//    EXPECT_EQUAL(computePowerIndexes(blocks), expected);
-//}
+PROVIDED_TEST("Test power index, blocks EU post-Nice") {
+    // Estonia is one of those 4s!!
+    Vector<int> blocks = {29,29,29,29,27,27,14,13,12,12,12,12,12,10,10,10,7,7,7,7,7,4,4,4,4,4,3};
+    Vector<int> expected = {8, 8, 8, 8, 7, 7, 3, 3, 3, 3, 3, 3, 3, 2, 2, 2, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0};
+    EXPECT_EQUAL(computePowerIndexes(blocks), expected);
+}
 
 PROVIDED_TEST("Time power index operation") {
     Vector<int> blocks;

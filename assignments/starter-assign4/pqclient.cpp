@@ -7,11 +7,11 @@
 #include "testing/SimpleTest.h"
 using namespace std;
 
-/* TODO: Refer to pqclient.h for more information about what this function does, then
- * delete this comment.
+/* 
+ * Use the pqarray to sort a given vector.
  */
 void pqSort(Vector<DataPoint>& v) {
-    PQArray pq;
+    PQHeap pq;
 
     /* Using the Priority Queue data structure as a tool to sort, neat! */
 
@@ -30,12 +30,25 @@ void pqSort(Vector<DataPoint>& v) {
     }
 }
 
-/* TODO: Refer to pqclient.h for more information about what this function does, then
- * delete this comment.
+/* 
+ * 
  */
 Vector<DataPoint> topK(istream& stream, int k) {
-    /* TODO: Implement this function. */
-    return {};
+    PQHeap pq;
+    DataPoint cur;
+    while (stream >> cur) {
+       pq.enqueue(cur);
+       if (pq.size() > k) {
+           pq.dequeue();
+       }
+    }
+    int index = pq.size() - 1;
+    Vector<DataPoint> res(pq.size());
+    while (index >= 0) {
+        res[index] = pq.dequeue();
+        index--;
+    }
+    return res;
 }
 
 

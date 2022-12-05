@@ -10,80 +10,128 @@ const int INITIAL_CAPACITY = 10;
 const int NONE = -1; // used as sentinel index
 
 /*
- * TODO: Replace this comment with a descriptive function
- * comment about your implementation of the function.
+ * The default constructor for the PQHeap class.
  */
 PQHeap::PQHeap() {
-    /* TODO: Implement this function. */
+    _elements = new DataPoint[INITIAL_CAPACITY]();
+    _numAllocated = INITIAL_CAPACITY;
+    _numFilled = 0;
 }
 
 /*
- * TODO: Replace this comment with a descriptive function
- * comment about your implementation of the function.
+ * The default destructor for the PQHeap class.
  */
 PQHeap::~PQHeap() {
-    /* TODO: Implement this function. */
+    delete[] _elements;
 }
 
 /*
- * TODO: Replace this comment with a descriptive function
- * comment about your implementation of the function.
+ * Insert the given element into the heap.
  */
 void PQHeap::enqueue(DataPoint elem) {
-    /* TODO: Implement this function. */
+    if (_numFilled == _numAllocated) {
+        resize();
+    }
+    int index = _numFilled;
+    int cur;
+    _elements[index] = elem;
+    while ((cur = getParentIndex(index)) != NONE) {
+        if (_elements[index].priority < _elements[cur].priority) {
+            swap(index, cur);
+            index = cur;
+        } else {
+            break;
+        }
+    }
+    _numFilled++;
+}
+
+void PQHeap::swap(int index1, int index2) {
+    DataPoint temp = _elements[index1];
+    _elements[index1] = _elements[index2];
+    _elements[index2] = temp;
+}
+void PQHeap::resize() {
+    DataPoint *_new = new DataPoint[_numAllocated * 2]();
+    for (int i = 0; i < _numFilled; i++) {
+        _new[i] = _elements[i];
+    }
+    delete[] _elements;
+    _elements = _new;
+    _numAllocated *= 2;
 }
 
 /*
- * TODO: Replace this comment with a descriptive function
- * comment about your implementation of the function.
+ * Get the foremost element of the heap.
  */
 DataPoint PQHeap::peek() const {
-    /* TODO: Implement this function. */
-    return { "", 0 };
+    return _elements[0];
 }
 
 /*
- * TODO: Replace this comment with a descriptive function
- * comment about your implementation of the function.
+ * Remove the foremost element.
  */
 DataPoint PQHeap::dequeue() {
-    /* TODO: Implement this function. */
-    return { "", 0 };
+    DataPoint res = _elements[0];
+    _elements[0] = _elements[_numFilled - 1];
+    _numFilled--;
+    int left, right;
+    int index = 0;
+    while ((left = getLeftChildIndex(index)) != NONE) {
+        if ((right = getRightChildIndex(index)) == NONE) {
+            if (_elements[left].priority < _elements[index].priority) {
+                swap(left, index);
+                index = left;
+            } else {
+                break;
+            }
+        } else {
+            if (_elements[left].priority < _elements[index].priority 
+                    && _elements[left].priority <= _elements[right].priority) {
+                swap(left, index);
+                index = left;
+            } else if (_elements[right].priority < _elements[index].priority 
+                    && _elements[right].priority <= _elements[left].priority) {
+                swap(right, index);
+                index = right;
+            } else {
+                break;
+            }
+        }
+    }
+    return res;
 }
 
 /*
- * TODO: Replace this comment with a descriptive function
- * comment about your implementation of the function.
+ * This method return whether the heap is empty.
  */
 bool PQHeap::isEmpty() const {
-    /* TODO: Implement this function. */
-    return false;
+    return _numFilled == 0;
 }
 
 /*
- * TODO: Replace this comment with a descriptive function
- * comment about your implementation of the function.
+ * Return the size of the heap.
  */
 int PQHeap::size() const {
-    /* TODO: Implement this function. */
-    return 0;
+    return _numFilled;
 }
 
 /*
- * TODO: Replace this comment with a descriptive function
- * comment about your implementation of the function.
+ * The method to clear up the heap.
  */
 void PQHeap::clear() {
-    /* TODO: Implement this function. */
+    _numFilled = 0;
 }
 
 /*
- * TODO: Replace this comment with a descriptive function
- * comment about your implementation of the function.
+ * The helper function to print the entire heap to help 
+ * debug the heap program.
  */
 void PQHeap::printDebugInfo(string msg) const {
     cout << msg << endl;
-    /* TODO: Implement this function. */
+    for (int i = 0; i < _numFilled; i++) {
+        cout << i << " : " << _elements[i] << endl;
+    }
 }
 
 /*
@@ -93,7 +141,28 @@ void PQHeap::printDebugInfo(string msg) const {
  * violate the heap property, an error should be thrown.
  */
 void PQHeap::validateInternalState() const {
-    /* TODO: Implement this function. */
+    int left, right;
+    for (int index = 0; index < _numFilled; index++) {
+        left = getLeftChildIndex(index);
+        right = getRightChildIndex(index); 
+        if (left != NONE) {
+            if (right != NONE) {
+                if (_elements[right].priority < _elements[index].priority) {
+                    cout << "Error order!" << endl;
+                    cout << right << " : " << _elements[right] << endl;
+                    cout << index << " : " << _elements[index] << endl;
+                    error("This is not a valid heap!");
+                }
+            } else {
+                if (_elements[left].priority < _elements[index].priority) {
+                    cout << "Error order!" << endl;
+                    cout << left << " : " << _elements[left] << endl;
+                    cout << index << " : " << _elements[index] << endl;
+                    error("This is not a valid heap!");
+                }
+            }
+        }
+    }
 }
 
 /*
@@ -103,8 +172,9 @@ void PQHeap::validateInternalState() const {
  * the sentinel value NONE.
  */
 int PQHeap::getParentIndex(int child) const {
-    /* TODO: Implement this function. */
-    return 0;
+    int parent = (child - 1) / 2;
+    if (parent < 0) return NONE;
+    return parent;
 }
 
 /*
@@ -114,8 +184,9 @@ int PQHeap::getParentIndex(int child) const {
  * the sentinel value NONE.
  */
 int PQHeap::getLeftChildIndex(int parent) const {
-    /* TODO: Implement this function. */
-    return 0;
+    int child = parent * 2 + 1;
+    if (child >= _numFilled) return NONE;
+    return child;
 }
 
 /*
@@ -125,16 +196,12 @@ int PQHeap::getLeftChildIndex(int parent) const {
  * the sentinel value NONE.
  */
 int PQHeap::getRightChildIndex(int parent) const {
-    /* TODO: Implement this function. */
-    return 0;
+    int child = parent * 2 + 2;
+    if (child >= _numFilled) return NONE;
+    return child;
 }
 
 /* * * * * * Test Cases Below This Point * * * * * */
-
-/* TODO: Add your own custom tests here! */
-
-
-
 
 /* * * * * Provided Tests Below This Point * * * * */
 
@@ -147,10 +214,12 @@ PROVIDED_TEST("PQHeap example from writeup, validate each step") {
     pq.validateInternalState();
     for (DataPoint dp : input) {
         pq.enqueue(dp);
+        pq.printDebugInfo("The content of the heap: ");
         pq.validateInternalState();
     }
     while (!pq.isEmpty()) {
         pq.dequeue();
+        pq.printDebugInfo("The content of the heap: ");
         pq.validateInternalState();
     }
 }

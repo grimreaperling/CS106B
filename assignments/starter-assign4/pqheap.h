@@ -94,7 +94,12 @@ public:
     void validateInternalState() const;
 
 private:
-    /* TODO: Add whatever fields, types, and helper functions that you'd like! */
+    /* The declaration of the private variables.*/
+    DataPoint* _elements;
+    int _numAllocated;
+    int _numFilled;
+    void resize(); 
+    void swap(int index1, int index2);
 
     /* While not a strict requirement, we strongly recommend implementing the
      * helper functions declared below. They will make your code much cleaner, and

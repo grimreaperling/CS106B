@@ -30,11 +30,46 @@ PQArray::~PQArray() {
 }
 
 /*
- * TODO: Replace this comment with a descriptive function
- * comment about your implementation of the function.
+ * Add the given elment into the PQArray 
  */
 void PQArray::enqueue(DataPoint elem) {
-    /* TODO: Implement this function. */
+    if (_numFilled == _numAllocated) {
+        resize(_numAllocated + 1);
+    }
+    int index = findLoc(elem);
+    int i = index;
+    DataPoint curr = _elements[i];
+    while (i < _numFilled) {
+        DataPoint temp = _elements[i + 1];
+        _elements[i + 1] = curr;
+        curr = temp;
+        i++;
+    }
+    _elements[index] = elem;
+    _numFilled++;
+}
+
+void PQArray::resize(int length) {
+    DataPoint* _new = new DataPoint[length]();
+    int i = 0;
+    while (i < _numAllocated) {
+        _new[i] = _elements[i];
+        i++;
+    }
+    delete[] _elements;
+    _elements = _new;
+    _numAllocated = length;
+}
+
+int PQArray::findLoc(DataPoint elem) {
+    int index = 0;
+    while (index < _numFilled) {
+        if (_elements[index].priority < elem.priority) {
+            return index;
+        }
+        index++;
+    }
+    return _numFilled;
 }
 
 /*

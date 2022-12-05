@@ -40,11 +40,23 @@ void Ball::move() {
     _x += _vx;
     _y += _vy;
     // if outside left or right edge, bounce horizontally
+    // the bug: when the condition is satisfy the location of the ball is already out of the boundary so 
+    // we need to reset the location of the ball to avoid the condition that the ball is stuck.
     if (_x < 0 || _x + SIZE > _window->getWidth()) {
+        if (_x < 0) {
+            _x = 0;
+        } else {
+            _x = _window->getWidth() - SIZE;
+        }
         _vx = -_vx;
     }
     // if outside top or bottom edge, bounce vertically
     if (_y < 0 || _y + SIZE > _window->getHeight()) {
+        if (_y < 0) {
+            _y = 0;
+        } else {
+            _y = _window->getHeight() - SIZE; 
+        }
         _vy = -_vy;
     }
 }
@@ -63,7 +75,7 @@ PROVIDED_TEST("Animate bouncing balls in window for a while") {
 
     // Construct many random ball objects, store all balls in a vector
     Vector<Ball> allBalls;
-    for (int i = 0; i < 9; i++) {
+    for (int i = 0; i < 14; i++) {
          Ball ball(i, &window);
          allBalls.add(ball);
     }

@@ -1,7 +1,7 @@
 /****************************************************************************
 ** Meta object code from reading C++ file 'gdownloader.h'
 **
-** Created by: The Qt Meta Object Compiler version 68 (Qt 6.3.2)
+** Created by: The Qt Meta Object Compiler version 68 (Qt 6.4.0)
 **
 ** WARNING! All changes made in this file will be lost!
 *****************************************************************************/
@@ -9,20 +9,24 @@
 #include <memory>
 #include "graphics/gdownloader.h"
 #include <QtNetwork/QSslError>
-#include <QtCore/qbytearray.h>
 #include <QtCore/qmetatype.h>
 #include <QtCore/QList>
 #if !defined(Q_MOC_OUTPUT_REVISION)
 #error "The header file 'gdownloader.h' doesn't include <QObject>."
 #elif Q_MOC_OUTPUT_REVISION != 68
-#error "This file was generated using the moc from 6.3.2. It"
+#error "This file was generated using the moc from 6.4.0. It"
 #error "cannot be used with the include files from this version of Qt."
 #error "(The moc has changed too much.)"
+#endif
+
+#ifndef Q_CONSTINIT
+#define Q_CONSTINIT
 #endif
 
 QT_BEGIN_MOC_NAMESPACE
 QT_WARNING_PUSH
 QT_WARNING_DISABLE_DEPRECATED
+namespace {
 struct qt_meta_stringdata_GDownloader_t {
     uint offsetsAndSizes[32];
     char stringdata0[12];
@@ -44,7 +48,7 @@ struct qt_meta_stringdata_GDownloader_t {
 };
 #define QT_MOC_LITERAL(ofs, len) \
     uint(sizeof(qt_meta_stringdata_GDownloader_t::offsetsAndSizes) + ofs), len 
-static const qt_meta_stringdata_GDownloader_t qt_meta_stringdata_GDownloader = {
+Q_CONSTINIT static const qt_meta_stringdata_GDownloader_t qt_meta_stringdata_GDownloader = {
     {
         QT_MOC_LITERAL(0, 11),  // "GDownloader"
         QT_MOC_LITERAL(12, 10),  // "downloaded"
@@ -81,8 +85,9 @@ static const qt_meta_stringdata_GDownloader_t qt_meta_stringdata_GDownloader = {
     "waitForDownload"
 };
 #undef QT_MOC_LITERAL
+} // unnamed namespace
 
-static const uint qt_meta_data_GDownloader[] = {
+Q_CONSTINIT static const uint qt_meta_data_GDownloader[] = {
 
  // content:
       10,       // revision
@@ -123,6 +128,44 @@ static const uint qt_meta_data_GDownloader[] = {
 
        0        // eod
 };
+
+Q_CONSTINIT const QMetaObject GDownloader::staticMetaObject = { {
+    QMetaObject::SuperData::link<QObject::staticMetaObject>(),
+    qt_meta_stringdata_GDownloader.offsetsAndSizes,
+    qt_meta_data_GDownloader,
+    qt_static_metacall,
+    nullptr,
+    qt_incomplete_metaTypeArray<qt_meta_stringdata_GDownloader_t,
+        // Q_OBJECT / Q_GADGET
+        QtPrivate::TypeAndForceComplete<GDownloader, std::true_type>,
+        // method 'downloaded'
+        QtPrivate::TypeAndForceComplete<void, std::false_type>,
+        // method 'downloadInternal'
+        QtPrivate::TypeAndForceComplete<void, std::false_type>,
+        // method 'fileDownloadError'
+        QtPrivate::TypeAndForceComplete<void, std::false_type>,
+        QtPrivate::TypeAndForceComplete<QNetworkReply::NetworkError, std::false_type>,
+        // method 'reportNoSSL'
+        QtPrivate::TypeAndForceComplete<void, std::false_type>,
+        // method 'saveDownloadedData'
+        QtPrivate::TypeAndForceComplete<void, std::false_type>,
+        QtPrivate::TypeAndForceComplete<const std::string &, std::false_type>,
+        QtPrivate::TypeAndForceComplete<const std::string &, std::false_type>,
+        // method 'saveDownloadedData'
+        QtPrivate::TypeAndForceComplete<void, std::false_type>,
+        QtPrivate::TypeAndForceComplete<const std::string &, std::false_type>,
+        // method 'sslErrorsNam'
+        QtPrivate::TypeAndForceComplete<void, std::false_type>,
+        QtPrivate::TypeAndForceComplete<QNetworkReply *, std::false_type>,
+        QtPrivate::TypeAndForceComplete<QList<QSslError>, std::false_type>,
+        // method 'sslErrorsReply'
+        QtPrivate::TypeAndForceComplete<void, std::false_type>,
+        QtPrivate::TypeAndForceComplete<QList<QSslError>, std::false_type>,
+        // method 'waitForDownload'
+        QtPrivate::TypeAndForceComplete<void, std::false_type>
+    >,
+    nullptr
+} };
 
 void GDownloader::qt_static_metacall(QObject *_o, QMetaObject::Call _c, int _id, void **_a)
 {
@@ -179,22 +222,6 @@ void GDownloader::qt_static_metacall(QObject *_o, QMetaObject::Call _c, int _id,
         }
     }
 }
-
-const QMetaObject GDownloader::staticMetaObject = { {
-    QMetaObject::SuperData::link<QObject::staticMetaObject>(),
-    qt_meta_stringdata_GDownloader.offsetsAndSizes,
-    qt_meta_data_GDownloader,
-    qt_static_metacall,
-    nullptr,
-qt_incomplete_metaTypeArray<qt_meta_stringdata_GDownloader_t
-, QtPrivate::TypeAndForceComplete<GDownloader, std::true_type>, QtPrivate::TypeAndForceComplete<void, std::false_type>
-, QtPrivate::TypeAndForceComplete<void, std::false_type>, QtPrivate::TypeAndForceComplete<void, std::false_type>, QtPrivate::TypeAndForceComplete<QNetworkReply::NetworkError, std::false_type>, QtPrivate::TypeAndForceComplete<void, std::false_type>, QtPrivate::TypeAndForceComplete<void, std::false_type>, QtPrivate::TypeAndForceComplete<const std::string &, std::false_type>, QtPrivate::TypeAndForceComplete<const std::string &, std::false_type>, QtPrivate::TypeAndForceComplete<void, std::false_type>, QtPrivate::TypeAndForceComplete<const std::string &, std::false_type>, QtPrivate::TypeAndForceComplete<void, std::false_type>, QtPrivate::TypeAndForceComplete<QNetworkReply *, std::false_type>, QtPrivate::TypeAndForceComplete<QList<QSslError>, std::false_type>, QtPrivate::TypeAndForceComplete<void, std::false_type>, QtPrivate::TypeAndForceComplete<QList<QSslError>, std::false_type>, QtPrivate::TypeAndForceComplete<void, std::false_type>
-
-
->,
-    nullptr
-} };
-
 
 const QMetaObject *GDownloader::metaObject() const
 {

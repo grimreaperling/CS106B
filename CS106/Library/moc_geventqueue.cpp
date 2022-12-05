@@ -1,26 +1,30 @@
 /****************************************************************************
 ** Meta object code from reading C++ file 'geventqueue.h'
 **
-** Created by: The Qt Meta Object Compiler version 68 (Qt 6.3.2)
+** Created by: The Qt Meta Object Compiler version 68 (Qt 6.4.0)
 **
 ** WARNING! All changes made in this file will be lost!
 *****************************************************************************/
 
 #include <memory>
 #include "graphics/geventqueue.h"
-#include <QtCore/qbytearray.h>
 #include <QtCore/qmetatype.h>
 #if !defined(Q_MOC_OUTPUT_REVISION)
 #error "The header file 'geventqueue.h' doesn't include <QObject>."
 #elif Q_MOC_OUTPUT_REVISION != 68
-#error "This file was generated using the moc from 6.3.2. It"
+#error "This file was generated using the moc from 6.4.0. It"
 #error "cannot be used with the include files from this version of Qt."
 #error "(The moc has changed too much.)"
+#endif
+
+#ifndef Q_CONSTINIT
+#define Q_CONSTINIT
 #endif
 
 QT_BEGIN_MOC_NAMESPACE
 QT_WARNING_PUSH
 QT_WARNING_DISABLE_DEPRECATED
+namespace {
 struct qt_meta_stringdata_GEventQueue_t {
     uint offsetsAndSizes[6];
     char stringdata0[12];
@@ -29,7 +33,7 @@ struct qt_meta_stringdata_GEventQueue_t {
 };
 #define QT_MOC_LITERAL(ofs, len) \
     uint(sizeof(qt_meta_stringdata_GEventQueue_t::offsetsAndSizes) + ofs), len 
-static const qt_meta_stringdata_GEventQueue_t qt_meta_stringdata_GEventQueue = {
+Q_CONSTINIT static const qt_meta_stringdata_GEventQueue_t qt_meta_stringdata_GEventQueue = {
     {
         QT_MOC_LITERAL(0, 11),  // "GEventQueue"
         QT_MOC_LITERAL(12, 10),  // "eventReady"
@@ -40,8 +44,9 @@ static const qt_meta_stringdata_GEventQueue_t qt_meta_stringdata_GEventQueue = {
     ""
 };
 #undef QT_MOC_LITERAL
+} // unnamed namespace
 
-static const uint qt_meta_data_GEventQueue[] = {
+Q_CONSTINIT static const uint qt_meta_data_GEventQueue[] = {
 
  // content:
       10,       // revision
@@ -62,6 +67,21 @@ static const uint qt_meta_data_GEventQueue[] = {
 
        0        // eod
 };
+
+Q_CONSTINIT const QMetaObject GEventQueue::staticMetaObject = { {
+    QMetaObject::SuperData::link<QObject::staticMetaObject>(),
+    qt_meta_stringdata_GEventQueue.offsetsAndSizes,
+    qt_meta_data_GEventQueue,
+    qt_static_metacall,
+    nullptr,
+    qt_incomplete_metaTypeArray<qt_meta_stringdata_GEventQueue_t,
+        // Q_OBJECT / Q_GADGET
+        QtPrivate::TypeAndForceComplete<GEventQueue, std::true_type>,
+        // method 'eventReady'
+        QtPrivate::TypeAndForceComplete<void, std::false_type>
+    >,
+    nullptr
+} };
 
 void GEventQueue::qt_static_metacall(QObject *_o, QMetaObject::Call _c, int _id, void **_a)
 {
@@ -84,22 +104,6 @@ void GEventQueue::qt_static_metacall(QObject *_o, QMetaObject::Call _c, int _id,
     }
     (void)_a;
 }
-
-const QMetaObject GEventQueue::staticMetaObject = { {
-    QMetaObject::SuperData::link<QObject::staticMetaObject>(),
-    qt_meta_stringdata_GEventQueue.offsetsAndSizes,
-    qt_meta_data_GEventQueue,
-    qt_static_metacall,
-    nullptr,
-qt_incomplete_metaTypeArray<qt_meta_stringdata_GEventQueue_t
-, QtPrivate::TypeAndForceComplete<GEventQueue, std::true_type>, QtPrivate::TypeAndForceComplete<void, std::false_type>
-
-
-
->,
-    nullptr
-} };
-
 
 const QMetaObject *GEventQueue::metaObject() const
 {

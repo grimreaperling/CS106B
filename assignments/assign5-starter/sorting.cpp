@@ -22,23 +22,24 @@ void partition(ListNode*& front, ListNode*& less, ListNode*& equal, ListNode*& g
     if (front == nullptr) return; 
     int pivot = front->data;
 
-    equal = front;
-    front = front->next;
+    // initialize some of the variables
+    equal = front;   // store the first element of the linklist into the equal part.
+    front = front->next; // the order is matters, we must first save the front->next before equal modify it.
     equal->next = nullptr;
 
-    ListNode *curr1, *curr2, *curr3;
-    curr3 = equal;
+    ListNode *curr1, *curr2, *curr3; // we use these variables to keep track of the last element of the every part.
+    curr3 = equal; // the equal is current not empty so we assign it to curr3
 
     while (front != nullptr) {
         int data = front->data;
         ListNode* cur = front;
         front = front->next;
         if (data > pivot) {
-            if (greater == nullptr) {
+            if (greater == nullptr) { // if the greater part is empty the cur node is the first element of greater part.
                 greater = cur;
                 greater->next = nullptr;
                 curr1 = greater;
-            } else {
+            } else {                  // else we should add this element to the end of the greater part which is stored in the curr1.
                 curr1->next = cur;
                 curr1->next->next = nullptr;
                 curr1 = curr1->next;
@@ -63,7 +64,7 @@ void partition(ListNode*& front, ListNode*& less, ListNode*& equal, ListNode*& g
 
 void concatenate(ListNode*& front, ListNode*& less, ListNode*&equal, ListNode*& greater) {
     ListNode* cur = front;
-    if (less != nullptr) {
+    if (less != nullptr) {  // this condition is used to deal with the condition of some of the list given is empty.
         cur = less;
         front = less;
         while (cur->next != nullptr) {
@@ -73,7 +74,7 @@ void concatenate(ListNode*& front, ListNode*& less, ListNode*&equal, ListNode*& 
     if (equal != nullptr) {
         if (cur != nullptr) {
             cur->next = equal;
-            while (cur->next != nullptr) {
+            while (cur->next != nullptr) { // we need cur to track the last element of the list.
                 cur = cur->next;
             }
         } else {

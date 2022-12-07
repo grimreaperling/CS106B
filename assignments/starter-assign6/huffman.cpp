@@ -140,23 +140,54 @@ EncodingTreeNode* createExampleTree() {
      *                / \
      *               R   S
      */
-    /* TODO: Implement this utility function needed for testing. */
-    return nullptr;
+    EncodingTreeNode* E = new EncodingTreeNode('E');
+    EncodingTreeNode* R = new EncodingTreeNode('R');
+    EncodingTreeNode* T = new EncodingTreeNode('T');
+    EncodingTreeNode* S = new EncodingTreeNode('S');
+    EncodingTreeNode* node1 = new EncodingTreeNode(R, S);
+    EncodingTreeNode* node2 = new EncodingTreeNode(node1, E);
+    EncodingTreeNode* node3 = new EncodingTreeNode(T, node2);
+    return node3;
 }
 
 void deallocateTree(EncodingTreeNode* t) {
-    /* TODO: Implement this utility function needed for testing. */
+    if (t == nullptr) return;
+    deallocateTree(t->zero);
+    deallocateTree(t->one);
+    delete t;
 }
 
 bool areEqual(EncodingTreeNode* a, EncodingTreeNode* b) {
-    /* TODO: Implement this utility function needed for testing. */
-    return false;
+    if (a == nullptr || b == nullptr) {
+        if (a == b) return true;
+        else return false;
+    }
+    if (a->isLeaf() && b->isLeaf()) {
+        if (a->getChar() == b->getChar()) {
+            return true;
+        } else {
+            return false;
+        }
+    } else if (a->isLeaf() || b->isLeaf()) {
+        return false;
+    } else {
+        return areEqual(a->one, b->one) && areEqual(a->zero, b->zero);
+    }
 }
 
 /* * * * * * Test Cases Below This Point * * * * * */
 
 /* TODO: Write your own student tests. */
+STUDENT_TEST("The test of the deallocate function!") {
+    EncodingTreeNode* cur = createExampleTree();
+    deallocateTree(cur);
+}
 
+STUDENT_TEST("The test of the areEqual function!") {
+    EncodingTreeNode* tree1 = createExampleTree();
+    EncodingTreeNode* tree2 = createExampleTree();
+    EXPECT(areEqual(tree1, tree2));
+}
 
 
 

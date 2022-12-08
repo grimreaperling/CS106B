@@ -19,12 +19,21 @@ using namespace std;
  * are no requirements about what it should look like after this function
  * returns. The encoding tree should be unchanged.
  *
- * TODO: Add any additional information to this comment that is necessary to describe
- * your implementation.
+ * iterate over the queue of the bit and return if reach the leaf of the tree.
  */
 string decodeText(EncodingTreeNode* tree, Queue<Bit>& messageBits) {
-    /* TODO: Implement this function. */
-    return "";
+    EncodingTreeNode* cur = tree;
+    string res = "";
+    while (!messageBits.isEmpty()) {
+        Bit bit = messageBits.dequeue();
+        if (bit == false) cur = cur->zero;
+        else cur = cur->one;
+        if (cur->isLeaf()) {
+            res += cur->getChar();
+            cur = tree;
+        }
+    }
+    return res;
 }
 
 /**
@@ -37,12 +46,18 @@ string decodeText(EncodingTreeNode* tree, Queue<Bit>& messageBits) {
  * are no requirements about what they should look like after this function
  * returns.
  *
- * TODO: Add any additional information to this comment that is necessary to describe
- * your implementation.
+ * Solve this problem use a recursive way.
  */
 EncodingTreeNode* unflattenTree(Queue<Bit>& treeShape, Queue<char>& treeLeaves) {
-    /* TODO: Implement this function. */
-    return nullptr;
+    Bit bit = treeShape.dequeue();
+    if (bit == false) {
+        EncodingTreeNode* res = new EncodingTreeNode(treeLeaves.dequeue());
+        return res;
+    }
+    EncodingTreeNode* left = unflattenTree(treeShape, treeLeaves);
+    EncodingTreeNode* right = unflattenTree(treeShape, treeLeaves);
+    EncodingTreeNode* res = new EncodingTreeNode(left, right);
+    return res;
 }
 
 /**
@@ -55,12 +70,13 @@ EncodingTreeNode* unflattenTree(Queue<Bit>& treeShape, Queue<char>& treeLeaves) 
  * are no requirements about what it should look like after this function
  * returns.
  *
- * TODO: Add any additional information to this comment that is necessary to describe
- * your implementation.
+ * Compound the above two function to construct the decompose function.
  */
 string decompress(EncodedData& data) {
-    /* TODO: Implement this function. */
-    return "";
+    EncodingTreeNode* tree = unflattenTree(data.treeShape, data.treeLeaves);
+    string res =  decodeText(tree, data.messageBits);
+    deallocateTree(tree);
+    return res;
 }
 
 /**
@@ -78,10 +94,50 @@ string decompress(EncodedData& data) {
  * your implementation.
  */
 EncodingTreeNode* buildHuffmanTree(string text) {
-    /* TODO: Implement this function. */
-    return nullptr;
+    Map<char, double> map;
+    // We construct a map to map a char to the time of it's occurrence.
+    for (char c : text) {
+        if (map.containsKey(c)) {
+            map[c] += 1;
+        } else {
+            double priority = 1;
+            map.put(c, priority);
+        }
+    }
+    PriorityQueue<EncodingTreeNode*> pq;
+    // We construct the priorityqueue through the information given by the map.
+    for (char c : map) {
+        EncodingTreeNode* cur = new EncodingTreeNode(c);
+        pq.enqueue(cur, map[c]);
+    }
+    while (pq.size() > 1) {
+        double priority1 = pq.peekPriority();
+        EncodingTreeNode* first = pq.dequeue();
+        double priority2 = pq.peekPriority();
+        EncodingTreeNode* second = pq.dequeue();
+        EncodingTreeNode* cur = new EncodingTreeNode(first, second);
+        pq.enqueue(cur, priority1 + priority2);
+    }
+    return pq.dequeue();
 }
 
+// This is the helper function to traverse the tree and build the map.
+void mapChar(EncodingTreeNode* tree, Map<char, Vector<Bit>>& map, Vector<Bit> code) {
+    if (tree->isLeaf()) {
+        char c = tree->getChar();
+        map.put(c, code);
+        return;
+    }
+    if (tree->zero != nullptr) {
+        code.add(Bit(0));
+        mapChar(tree->zero, map, code);
+        code.remove(code.size() - 1);
+    }
+    if (tree->one != nullptr) {
+        code.add(Bit(1));
+        mapChar(tree->one, map, code);
+    }
+}
 /**
  * Given a string and an encoding tree, encode the text using the tree
  * and return a Queue<Bit> of the encoded bit sequence.
@@ -89,12 +145,20 @@ EncodingTreeNode* buildHuffmanTree(string text) {
  * You can assume tree is a valid non-empty encoding tree and contains an
  * encoding for every character in the text.
  *
- * TODO: Add any additional information to this comment that is necessary to describe
- * your implementation.
+ * Solve this problem with a recursive helper function.
  */
 Queue<Bit> encodeText(EncodingTreeNode* tree, string text) {
-    /* TODO: Implement this function. */
-    return {};
+    Map<char, Vector<Bit>> map;
+    Vector<Bit> code;
+    Queue<Bit> res;
+    mapChar(tree, map, code);
+    for (char c : text) {
+        code = map.get(c);
+        for (Bit bit : code) {
+            res.enqueue(bit);
+        }
+    }
+    return res;
 }
 
 /**
@@ -105,11 +169,20 @@ Queue<Bit> encodeText(EncodingTreeNode* tree, string text) {
  *
  * You can assume tree is a valid well-formed encoding tree.
  *
- * TODO: Add any additional information to this comment that is necessary to describe
- * your implementation.
+ * Also use a recursive way to solve the problem.
  */
 void flattenTree(EncodingTreeNode* tree, Queue<Bit>& treeShape, Queue<char>& treeLeaves) {
-    /* TODO: Implement this function. */
+    if (tree == nullptr) return;
+    if (tree->isLeaf()) {
+        char c = tree->getChar();
+        treeLeaves.enqueue(c);
+        treeShape.enqueue(Bit(0));
+        return;
+    } else {
+        treeShape.enqueue(Bit(1));
+        flattenTree(tree->zero, treeShape, treeLeaves);
+        flattenTree(tree->one, treeShape, treeLeaves);
+    }
 }
 
 /**
@@ -120,12 +193,17 @@ void flattenTree(EncodingTreeNode* tree, Queue<Bit>& treeShape, Queue<char>& tre
  * Reports an error if the message text does not contain at least
  * two distinct characters.
  *
- * TODO: Add any additional information to this comment that is necessary to describe
- * your implementation.
+ * Compound the above function and finally finish the compress function.
  */
 EncodedData compress(string messageText) {
-    /* TODO: Implement this function. */
-    return {};
+    EncodingTreeNode* tree = buildHuffmanTree(messageText);
+    Queue<Bit> treeShape;
+    Queue<char> treeLeaves;
+    flattenTree(tree, treeShape, treeLeaves);
+    Queue<Bit> messageBits = encodeText(tree, messageText);
+    EncodedData res = {treeShape, treeLeaves, messageBits};
+    deallocateTree(tree);
+    return res; 
 }
 
 /* * * * * * Testing Helper Functions Below This Point * * * * * */
@@ -181,20 +259,22 @@ bool areEqual(EncodingTreeNode* a, EncodingTreeNode* b) {
 STUDENT_TEST("The test of the deallocate function!") {
     EncodingTreeNode* cur = createExampleTree();
     deallocateTree(cur);
+    Queue<Bit>  treeShape  = { 1, 0, 1, 1, 0, 0, 0 };
+    Queue<char> treeLeaves = { 'T', 'R', 'S', 'E' };
+    EncodingTreeNode* tree = unflattenTree(treeShape, treeLeaves);
+    deallocateTree(tree);
 }
 
 STUDENT_TEST("The test of the areEqual function!") {
     EncodingTreeNode* tree1 = createExampleTree();
     EncodingTreeNode* tree2 = createExampleTree();
     EXPECT(areEqual(tree1, tree2));
+    deallocateTree(tree2->one);
+    tree2->one = nullptr;
+    EXPECT(!areEqual(tree1, tree2));
+    deallocateTree(tree1);
+    deallocateTree(tree2);
 }
-
-
-
-
-
-
-
 
 /* * * * * Provided Tests Below This Point * * * * */
 
